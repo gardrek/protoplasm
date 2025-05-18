@@ -1,0 +1,184 @@
+Recipe(
+    word_width: 16,
+
+    address_width: 8,
+
+    default_instruction_width: 16,
+
+    instructions: [
+        // load immediate
+        Instruction(
+            mnemonic: "ldi",
+            parameters: [
+                ("dest", Uint(4)),
+                ("imm", Uint(8)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "1 << 15 | cond << 12 | imm << 4 | dest",
+        ),
+
+        // transfer ops
+        Instruction(
+            mnemonic: "mov",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "inv",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $1 << 8 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "inc",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $2 << 8 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "neg",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $3 << 8 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "dec",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $5 << 8 | source << 4 | dest",
+        ),
+
+        // ALU ops
+        Instruction(
+            mnemonic: "add",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $8 << 8 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "sbc",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $B << 8 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "adc",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $C << 8 | source << 4 | dest",
+        ),
+        Instruction(
+            mnemonic: "sub",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | $D << 8 | source << 4 | dest",
+        ),
+
+        // compare
+        Instruction(
+            mnemonic: "cmp",
+            parameters: [
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+            ],
+            assembly: "$C << 12 | $B << 8 | source << 4 | dest",
+        ),
+
+        // generic non-immediate instruction. between this and ldi we cover all possible bit patterns
+        Instruction(
+            mnemonic: "op",
+            parameters: [
+                ("op", Uint(4)),
+                ("dest", Uint(4)),
+                ("source", Uint(4)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "cond << 12 | op << 8 | source << 4 | dest",
+        ),
+
+        // these instructions all calculate the off-by-one for the jumps for you
+        Instruction(
+            mnemonic: "JUMP",
+            parameters: [
+                ("imm", Uint(8)),
+                ("cond", Uint(3), Optional("0")),
+            ],
+            assembly: "1 << 15 | cond << 12 | (imm - 1) << 4",
+        ),
+        Instruction(
+            mnemonic: "JUMPZ",
+            parameters: [
+                ("imm", Uint(8)),
+            ],
+            assembly: "$9 << 12 | (imm - 1) << 4",
+        ),
+        Instruction(
+            mnemonic: "JUMPN",
+            parameters: [
+                ("imm", Uint(8)),
+            ],
+            assembly: "$A << 12 | (imm - 1) << 4",
+        ),
+        Instruction(
+            mnemonic: "JUMPC",
+            parameters: [
+                ("imm", Uint(8)),
+            ],
+            assembly: "$B << 12 | (imm - 1) << 4",
+        ),
+        Instruction(
+            mnemonic: "NOP",
+            parameters: [],
+            assembly: "$C000",
+        ),
+        Instruction(
+            mnemonic: "JUMPnZ",
+            parameters: [
+                ("imm", Uint(8)),
+            ],
+            assembly: "$D << 12 | (imm - 1) << 4",
+        ),
+        Instruction(
+            mnemonic: "JUMPnN",
+            parameters: [
+                ("imm", Uint(8)),
+            ],
+            assembly: "$E << 12 | (imm - 1) << 4",
+        ),
+        Instruction(
+            mnemonic: "JUMPnC",
+            parameters: [
+                ("imm", Uint(8)),
+            ],
+            assembly: "$F << 12 | (imm - 1) << 4",
+        ),
+    ]
+)

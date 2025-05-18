@@ -1,0 +1,51 @@
+mov 0, dest
+
+mov 0, (a + b) * c
+mov 0, a + (b * c)
+mov 0, a + b * c
+
+//~ loop:
+    //~ mov $f, 100
+
+
+/*
+// macro define syntax
+.macro ADC16(A, B) {
+        adc @A + 1, @B + 1
+        adc @A, @B
+}
+
+// macro call syntax
+        !ADC16 $50, $52
+*/
+
+/*
+.org $8000
+loop:
+        tst true, A
+        tst 'true, A
+        add r0, #$100, 1
+        sub r1 -= (r10 + C)
+.def TARGET %100
+end:    mov r3 = "abc"
+        jmp loop + TARGET
+
+test_objects:
+        mov ['true, 1, "1", #1, +1, -1, one]
+
+test_order_or_operations:
+        mov a + b * c
+        mov a + (b * c)
+        mov (a + b) * c
+
+.end directive
+
+.thingy do thing + do other thing 0
+
+adc 0
+*/
+
+
+
+
+
